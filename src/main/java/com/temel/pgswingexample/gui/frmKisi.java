@@ -5,8 +5,12 @@
  */
 package com.temel.pgswingexample.gui;
 
+import com.temel.pgswingexample.Il;
+import com.temel.pgswingexample.IlDbIslemleri;
 import com.temel.pgswingexample.Kisi;
 import com.temel.pgswingexample.KisiDbIslemleri;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -21,6 +25,7 @@ public class frmKisi extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
+        ilComboDoldur();
     }
 
     public frmKisi(java.awt.Frame parent, boolean modal, Kisi kisi) {
@@ -32,6 +37,12 @@ public class frmKisi extends javax.swing.JDialog {
         txtAdres.setText(kisi.getAdres());
         txtEmail.setText(kisi.getEmail());
         txtTel.setText(kisi.getTel());
+        
+        ilComboDoldur();
+        if(kisi.getIlId()!=0){
+            Il il = dbIslemleri.ilGetirId(kisi.getIlId());
+            cmbIl.setSelectedItem(il);
+        }
         this.setLocationRelativeTo(null);
     }
 
@@ -59,6 +70,8 @@ public class frmKisi extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
+        cmbIl = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -94,35 +107,40 @@ public class frmKisi extends javax.swing.JDialog {
 
         txtId.setEditable(false);
 
+        cmbIl.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel7.setText("İl :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(46, 46, 46)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel7))
+                        .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cmbIl, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                             .addComponent(txtTel)
                             .addComponent(txtEmail)
                             .addComponent(txtSoyad)
                             .addComponent(txtAd)
-                            .addComponent(txtId))
-                        .addGap(22, 22, 22))))
+                            .addComponent(txtId))))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,7 +149,7 @@ public class frmKisi extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtAd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -139,7 +157,11 @@ public class frmKisi extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSoyad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbIl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -151,11 +173,11 @@ public class frmKisi extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(18, 18, 18)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(26, 26, 26))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -172,6 +194,8 @@ public class frmKisi extends javax.swing.JDialog {
             kisi.setAdres(txtAdres.getText());
             kisi.setEmail(txtEmail.getText());
             kisi.setIsim(txtAd.getText());
+            Il model = (Il) cmbIl.getSelectedItem();
+            kisi.setIlId(model.getId());
             kisi.setSoyisim(txtSoyad.getText());
             kisi.setTel(txtTel.getText());
             dbIslemleri.kisiEkle(kisi);
@@ -184,6 +208,8 @@ public class frmKisi extends javax.swing.JDialog {
             kisi.setSoyisim(txtSoyad.getText());
             kisi.setTel(txtTel.getText());
             kisi.setId(Integer.parseInt(txtId.getText()));
+            Il model = (Il) cmbIl.getSelectedItem();
+            kisi.setIlId(model.getId());
             dbIslemleri.kisiGuncelle(kisi);
             this.dispose();
         }
@@ -191,6 +217,7 @@ public class frmKisi extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbIl;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -199,6 +226,7 @@ public class frmKisi extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtAd;
     private javax.swing.JTextArea txtAdres;
@@ -207,4 +235,10 @@ public class frmKisi extends javax.swing.JDialog {
     private javax.swing.JTextField txtSoyad;
     private javax.swing.JTextField txtTel;
     // End of variables declaration//GEN-END:variables
+
+    IlDbIslemleri dbIslemleri=new IlDbIslemleri();
+    private void ilComboDoldur() {
+        List<Il> iller = dbIslemleri.illeriGetir();
+        cmbIl.setModel(new DefaultComboBoxModel(iller.toArray()));
+    }
 }

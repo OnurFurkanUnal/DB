@@ -19,9 +19,9 @@ public class KisiDbIslemleri {
     private DBOperations dbOperations = new DBOperations();
 
     public void kisiEkle(Kisi kisi) {
-        String sqlQuery = " insert into kisi (ad,soyad,email,tel,adres) "
+        String sqlQuery = " insert into kisi (ad,soyad,email,tel,adres,il_id) "
                 + "values ('" + kisi.getIsim() + "','" + kisi.getSoyisim() + "','" + kisi.getEmail()
-                + "','" + kisi.getTel() + "','" + kisi.getAdres() + "') ";
+                + "','" + kisi.getTel() + "','" + kisi.getAdres() + "',"+kisi.getIlId()+") ";
 
         int count = dbOperations.insert(sqlQuery);
     }
@@ -29,7 +29,7 @@ public class KisiDbIslemleri {
     public void kisiGuncelle(Kisi kisi) {
         String sqlQuery = " update kisi set ad='" + kisi.getIsim() + "', soyad='" + kisi.getSoyisim()
                 + "', tel='" + kisi.getTel() + "', email='" + kisi.getEmail() + "', adres ='" + kisi.getAdres() + "' "
-                + " where id=" + kisi.getId();
+                + ", il_id="+kisi.getIlId()+" where id=" + kisi.getId();
 
         dbOperations.update(sqlQuery);
     }
@@ -47,6 +47,7 @@ public class KisiDbIslemleri {
                 k.setEmail(resultSet.getString("email"));
                 k.setId(resultSet.getInt("id"));
                 k.setTel(resultSet.getString("tel"));
+                k.setIlId(resultSet.getInt("il_id"));
                 list.add(k);
             }
         } catch (Exception e) {
@@ -72,6 +73,7 @@ public class KisiDbIslemleri {
                 k.setEmail(resultSet.getString("email"));
                 k.setId(resultSet.getInt("id"));
                 k.setTel(resultSet.getString("tel"));
+                k.setIlId(resultSet.getInt("il_id"));
                 return k;
             }
         } catch (Exception e) {

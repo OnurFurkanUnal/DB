@@ -17,6 +17,7 @@ public class Kisi {
     private String email;
     private String tel;
     private String adres;
+    private Integer ilId;
 
     public Integer getId() {
         return id;
@@ -66,6 +67,15 @@ public class Kisi {
         this.adres = adres;
     }
 
+    public Integer getIlId() {
+        return ilId;
+    }
+
+    public void setIlId(Integer ilId) {
+        this.ilId = ilId;
+    }
+
+    
     @Override
     public String toString() {
         return "Kisi{" + "id=" + id + ", isim=" + isim + ", soyisim=" + soyisim + ", email=" + email + ", tel=" + tel + ", adres=" + adres + '}';
