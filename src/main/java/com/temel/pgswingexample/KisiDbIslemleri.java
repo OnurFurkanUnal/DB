@@ -59,5 +59,25 @@ public class KisiDbIslemleri {
         String sqlQuery=" delete from kisi where id="+kisi.getId();
         dbOperations.delete(sqlQuery);
     }
+
+    public Kisi kisiGetirId(Integer id) {
+        try {
+            String sqlQuery = " select * from kisi where id="+id;
+            ResultSet resultSet = dbOperations.select(sqlQuery);
+            while (resultSet.next()) {
+                Kisi k = new Kisi();
+                k.setIsim(resultSet.getString("ad"));
+                k.setSoyisim(resultSet.getString("soyad"));
+                k.setAdres(resultSet.getString("adres"));
+                k.setEmail(resultSet.getString("email"));
+                k.setId(resultSet.getInt("id"));
+                k.setTel(resultSet.getString("tel"));
+                return k;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
 }

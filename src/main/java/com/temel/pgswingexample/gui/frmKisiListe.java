@@ -25,6 +25,8 @@ public class frmKisiListe extends javax.swing.JFrame {
 
     JPopupMenu popupMenu = new JPopupMenu();
     JMenuItem menuItemAdd = new JMenuItem("Kişi Ekle");
+    JMenuItem menuItemDelete = new JMenuItem("Kişi Sil");
+    JMenuItem menuItemUpdate = new JMenuItem("Kişi Güncelle");
 
     /**
      * Creates new form frmKisiListe
@@ -46,8 +48,12 @@ public class frmKisiListe extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKisi = new javax.swing.JTable();
+        jTextField1 = new javax.swing.JTextField();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        mnuCikis = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         tblKisi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -62,6 +68,22 @@ public class frmKisiListe extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblKisi);
 
+        jTextField1.setText("jTextField1");
+
+        jMenu1.setText("İşlemler");
+
+        mnuCikis.setText("Çıkış");
+        mnuCikis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCikisActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mnuCikis);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -70,43 +92,91 @@ public class frmKisiListe extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void mnuCikisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCikisActionPerformed
+        int sonuc = JOptionPane.showConfirmDialog(this, "Çıkmak istediğinizden Emin misiniz?", "Çıkış Onay", 2);
+        if (sonuc == 0) {
+            System.exit(sonuc);
+        }
+    }//GEN-LAST:event_mnuCikisActionPerformed
 
     /**
      * @param args the command line arguments
      */
     private void tabloDoldur() {
         List<Kisi> kisiList = dbIslemleri.kisileriGetir();
-        String[][] data = new String[kisiList.size()][4];
+        String[][] data = new String[kisiList.size()][6];
 
         for (int i = 0; i < kisiList.size(); i++) {
             data[i][0] = kisiList.get(i).getId().toString();
             data[i][1] = kisiList.get(i).getIsim();
             data[i][2] = kisiList.get(i).getSoyisim();
-            data[i][3] = kisiList.get(i).getAdres();
+            data[i][3] = kisiList.get(i).getTel();
+            data[i][4] = kisiList.get(i).getEmail();
+            data[i][5] = kisiList.get(i).getAdres();
         }
-        tblKisi.setModel(new DefaultTableModel(data, new String[]{"No", "Ad", "Soyad", "Adres"}));
+        tblKisi.setModel(new DefaultTableModel(data, new String[]{"No", "Ad", "Soyad", "Telefon", "Email", "Adres"}));
 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JMenuItem mnuCikis;
     private javax.swing.JTable tblKisi;
     // End of variables declaration//GEN-END:variables
 
     private void popupMenuEkle() {
         popupMenu.add(menuItemAdd);
-   
-        tblKisi.setComponentPopupMenu(popupMenu);
         menuItemAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(rootPane, "Selam");
+                frmKisi kisi = new frmKisi(null, true);
+                kisi.show();
+                tabloDoldur();
             }
         });
+        popupMenu.add(menuItemUpdate);
+        menuItemUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int indexOfSelectedItem = tblKisi.getSelectedRow();
+                if (indexOfSelectedItem != -1) {
+                    Integer id = Integer.parseInt(tblKisi.getValueAt(indexOfSelectedItem, 0).toString());
+                    Kisi kisi = dbIslemleri.kisiGetirId(id);
+                    frmKisi kisi1 = new frmKisi(null, true, kisi);
+                    kisi1.show();
+                    tabloDoldur();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Lütfen Kayıt Seçiniz!");
+                }
+            }
+        });
+
+        popupMenu.add(menuItemDelete);
+        menuItemDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int indexOfSelectedItem = tblKisi.getSelectedRow();
+                if (indexOfSelectedItem != -1) {
+                    Integer id = Integer.parseInt(tblKisi.getValueAt(indexOfSelectedItem, 0).toString());
+                    Kisi kisi = dbIslemleri.kisiGetirId(id);
+                    frmKisiSil kisiSil = new frmKisiSil(null, true, kisi);
+                    kisiSil.show();
+                    tabloDoldur();
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Lütfen Kayıt Seçiniz!");
+                }
+            }
+        });
+
+        tblKisi.setComponentPopupMenu(popupMenu);
     }
 }
